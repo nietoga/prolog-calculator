@@ -8,7 +8,7 @@ token(symbol, lparen, "(").
 token(symbol, rparen, ")").
 token(literal, num, Val) :- number(Val).
 
-tokens(String, Tokens) :- phrase(tokens(Tokens), String).
+tokens(String, Tokens) :- string_chars(String, Chars), phrase(tokens(Tokens), Chars).
 
 tokens([]) --> [].
 tokens(Tokens) --> whitespaces, tokens(Tokens).
