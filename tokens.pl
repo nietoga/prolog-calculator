@@ -1,19 +1,19 @@
-:- module(tokens, [lex/2, tokens/2]).
+:- module(tokens, [token/3, tokens/2]).
 
-lex(add, '+').
-lex(sub, '-').
-lex(mul, '*').
-lex(div, '/').
-lex(lparen, '(').
-lex(rparen, ')').
-lex(num, Val) :- number(Val).
+token(symbol, add, "+").
+token(symbol, sub, "-").
+token(symbol, mul, "*").
+token(symbol, div, "/").
+token(symbol, lparen, "(").
+token(symbol, rparen, ")").
+token(literal, num, Val) :- number(Val).
 
 tokens(String, Tokens) :- phrase(tokens(Tokens), String).
 
 tokens([]) --> [].
 tokens(Tokens) --> whitespaces, tokens(Tokens).
 tokens([Number | Tokens]) --> number(NumberChars), !, tokens(Tokens), { number_chars(Number, NumberChars) }.
-tokens([Symbol | Tokens]) --> lexeme(Symbol), tokens(Tokens).
+tokens([SymbolString | Tokens]) --> symbol(SymbolString), tokens(Tokens).
 
 whitespaces --> [W], { char_type(W, space) }.
 
@@ -23,4 +23,5 @@ digits([D | Ds]) --> digit(D), digits(Ds).
 digits([]) --> [].
 
 digit(D) --> [D], { char_type(D,digit) }.
-lexeme(SymbolChars) --> [Symbol], { lex(_, Symbol), atom_chars(SymbolChars, [Symbol]) }.
+
+symbol(SymbolString) --> [SymbolChar], { token(symbol, _ , SymbolString), string_chars(SymbolString, [SymbolChar]) }.

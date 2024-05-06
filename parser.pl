@@ -1,6 +1,6 @@
 :- module(parser, [expr/3]).
 
-:- use_module(tokens, [lex/2]).
+:- use_module(tokens, [token/3]).
 
 expr(Expr) --> addsubexpr(Expr).
 
@@ -17,6 +17,6 @@ restmuldivexpr(Expr, Expr) --> [].
 restmuldivexpr(LeftExpr, Expr) --> operator(div), muldivexpr(RightExpr), restmuldivexpr(div(LeftExpr, RightExpr), Expr).
 restmuldivexpr(LeftExpr, Expr) --> operator(mul), muldivexpr(RightExpr), restmuldivexpr(mul(LeftExpr, RightExpr), Expr).
 
-num(num(Val)) --> [Val], { lex(num, Val) }.
-operator(Name) --> [Op], { lex(Name, Op) }.
-symbol(Name) --> [Sym], { lex(Name, Sym) }.
+num(num(Val)) --> [Val], { token(literal, num, Val) }.
+operator(Name) --> [Op], { token(symbol, Name, Op) }.
+symbol(Name) --> [Sym], { token(symbol, Name, Sym) }.
